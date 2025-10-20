@@ -6,17 +6,13 @@ st.title('Empresa de Manufaturas')
 if 'df' not in st.session_state:
     st.session_state.df = pd.DataFrame(columns=[
         'Data', 'Turno', 'Máquina', 'Peças Produzidas', 'Peças Defeituosas'])
-dados = st.file_uploader('Carregar Arquivo da Empresa', type=['csv'])
+dados = st.file_uploader('Carregar Arquivo da Empresa', type=['csv'])#mantém os dados atualizados
 if dados is not None:
     st.session_state.df = pd.read_csv(dados)
 df = st.session_state.df
-#tabela
-st.subheader('Produção')
-df = st.data_editor(df, num_rows='dynamic')
-st.session_state.df = df  # mantém os dados atualizados
 #formulario
 st.sidebar.header('Adicionar novo registro')
-data = st.sidebar.date_input('Data')
+data = st.sidebar.date_input('Data').dt.date
 turno = st.sidebar.selectbox('Turno', ['Manhã', 'Tarde', 'Noite'])
 maquina = st.sidebar.selectbox('Máquina', ['Manual', 'Semiautomática', 'Automática'])
 pecas_produzidas = st.sidebar.number_input('Peças Produzidas', min_value=0)
@@ -27,10 +23,14 @@ if st.sidebar.button('Adicionar'):
         'Turno': [turno],
         'Máquina': [maquina],
         'Peças Produzidas': [pecas_produzidas],
-        'Peças Defeituosas': [pecas_defeituosas]
-    })
+        'Peças Defeituosas': [pecas_defeituosas]})
     st.session_state.df = pd.concat([st.session_state.df, novo], ignore_index=True)
     st.success('Registro adicionado!')
+#editar
+st.subheader('Produção')
+df = st.data_editor(df, num_rows='dynamic')
+st.session_state.df = df
+
 if not st.session_state.df.empty:
     df = st.session_state.df
     df['Data'] = pd.to_datetime(df['Data'])
@@ -71,3 +71,4 @@ if escolha == 'Gráficos':
 if st.button('Salvar'):
     st.session_state.df.to_csv('C:/Senai/Empresa.csv', index=False)
     st.success('✅ Dados salvos em C:\Senai\Empresa.csv')
+
