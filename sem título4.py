@@ -12,7 +12,7 @@ if dados is not None:
 df = st.session_state.df
 #formulario
 st.sidebar.header('Adicionar novo registro')
-data = st.sidebar.date_input('Data').dt.date
+data = st.sidebar.date_input('Data')
 turno = st.sidebar.selectbox('Turno', ['Manhã', 'Tarde', 'Noite'])
 maquina = st.sidebar.selectbox('Máquina', ['Manual', 'Semiautomática', 'Automática'])
 pecas_produzidas = st.sidebar.number_input('Peças Produzidas', min_value=0)
@@ -33,7 +33,7 @@ st.session_state.df = df
 
 if not st.session_state.df.empty:
     df = st.session_state.df
-    df['Data'] = pd.to_datetime(df['Data'])
+    df['Data'] = pd.to_datetime(df['Data']).dt.date
     df['Total'] = df['Peças Produzidas'] - df['Peças Defeituosas']
     df['Eficiência (%)'] = (df['Total'] / df['Peças Produzidas'] * 100).round(1)
     df['Taxa de Defeitos (%)'] = (df['Peças Defeituosas'] / df['Peças Produzidas'] * 100).round(1)
@@ -71,4 +71,3 @@ if escolha == 'Gráficos':
 if st.button('Salvar'):
     st.session_state.df.to_csv('C:/Senai/Empresa.csv', index=False)
     st.success('✅ Dados salvos em C:\Senai\Empresa.csv')
-
