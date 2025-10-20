@@ -69,5 +69,6 @@ if escolha == 'Gráficos':
     graf3 = df.groupby('Data')['Taxa de Defeitos (%)'].mean()
     st.line_chart(graf3)
 if st.button('Salvar'):
-    st.session_state.df.to_csv('C:/Senai/Empresa.csv', index=False)
+    st.session_state.df.to_csv('C:\Senai\Empresa.csv', index=False)
     st.success('✅ Dados salvos em C:\Senai\Empresa.csv')
+
